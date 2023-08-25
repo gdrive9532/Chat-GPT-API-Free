@@ -1,0 +1,28 @@
+name: Docker Build and Run
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *' # रोज़ रात 2 बजे
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build and Run Docker container
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: false
+        tags: latest
+
+    - name: Start Docker container
+      run: |
+        docker run -d -p 8080:8080 gptapi
+        
